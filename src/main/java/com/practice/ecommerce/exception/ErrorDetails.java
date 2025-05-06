@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Schema(description = "Standard error response")
-public class ErrorResponse {
+public class ErrorDetails {
     @Schema(description = "Timestamp of the error", example = "yyyy-MM-ddTHH:mm:ss")
     private LocalDateTime timestamp;
 
@@ -25,7 +25,7 @@ public class ErrorResponse {
     @Schema(description = "The request path of exception", example = "/api/public/XXX")
     private String path;
 
-    public ErrorResponse(HttpStatus status, String message, HttpServletRequest request) {
+    public ErrorDetails(HttpStatus status, String message, HttpServletRequest request) {
         this.timestamp = LocalDateTime.now();
         this.status = status.value();
         this.error = status.getReasonPhrase();

@@ -1,6 +1,7 @@
 package com.practice.ecommerce.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.practice.ecommerce.dto.UnifiedAPIResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,14 +28,16 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     ) throws IOException, ServletException {
         logger.warn("Access denied: {}", accessDeniedException.getMessage());
 
-        ErrorResponse error = new ErrorResponse(
+        ErrorDetails error = new ErrorDetails(
                 HttpStatus.FORBIDDEN,
                 "Access denied: " + accessDeniedException.getMessage(),
                 request
         );
 
+        UnifiedAPIResponse<Void> unifiedAPIResponse = new UnifiedAPIResponse<>(false, null, error);
+
         response.setContentType("application/json");
         response.setStatus(HttpStatus.FORBIDDEN.value());
-        mapper.writeValue(response.getOutputStream(), error);
+        mapper.writeValue(response.getOutputStream(), unifiedAPIResponse);
     }
 }
