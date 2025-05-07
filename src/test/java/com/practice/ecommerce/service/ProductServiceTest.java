@@ -57,6 +57,39 @@ public class ProductServiceTest {
     }
 
     @Test
+    void testUpdateProduct() {
+
+        // arrange
+        Long id = 1L;
+        Product originalProduct = new Product();
+        originalProduct.setId(id);
+        originalProduct.setName("TEST1");
+        originalProduct.setPrice(BigDecimal.valueOf(10));
+        originalProduct.setStock(2);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setId(id);
+        updatedProduct.setName("TEST1");
+        updatedProduct.setPrice(BigDecimal.valueOf(100));
+        updatedProduct.setStock(20);
+
+        when(productRepository.findById(id)).thenReturn(Optional.of(originalProduct));
+        when(productRepository.save(any(Product.class))).thenReturn(updatedProduct);
+
+        // act
+        UpsertProductDTO upsertProductDTO = new UpsertProductDTO("TEST1", "", BigDecimal.valueOf(100), 20);
+        Product savedProduct = productService.updateProduct(id, upsertProductDTO);
+
+        // assert
+        assertNotNull(savedProduct);
+        assertEquals("TEST1", savedProduct.getName());
+        assertEquals(BigDecimal.valueOf(100), savedProduct.getPrice());
+        assertNotEquals(2, savedProduct.getStock());
+        verify(productRepository, times(1)).save(any(Product.class));
+        verify(productRepository, times(1)).findById(id);
+    }
+
+    @Test
     void testGetProductById() {
 
         // arrange
@@ -99,8 +132,7 @@ public class ProductServiceTest {
         int page = 0;
         int size = 10;
         String sortBy = "id";
-        String direction = "asc";
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort.Direction sortDirection = Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
 
         List<Product> products = Arrays.asList(
@@ -129,8 +161,7 @@ public class ProductServiceTest {
         int page = 1;
         int size = 5;
         String sortBy = "name";
-        String direction = "desc";
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort.Direction sortDirection = Sort.Direction.DESC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
 
         List<Product> products = Arrays.asList(
