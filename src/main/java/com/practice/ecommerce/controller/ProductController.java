@@ -2,6 +2,8 @@ package com.practice.ecommerce.controller;
 
 import com.practice.ecommerce.dto.UnifiedAPIResponse;
 import com.practice.ecommerce.entity.Product;
+import com.practice.ecommerce.enumType.ProductSortField;
+import com.practice.ecommerce.enumType.SortDirection;
 import com.practice.ecommerce.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -42,11 +44,11 @@ public class ProductController {
     public ResponseEntity<UnifiedAPIResponse<Page<Product>>> getAllProduct(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction
+            @RequestParam(defaultValue = "id") ProductSortField sortBy,
+            @RequestParam(defaultValue = "asc") SortDirection direction
     ) {
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        Sort.Direction sortDirection = String.valueOf(direction).equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, String.valueOf(sortBy).toLowerCase()));
         Page<Product> products = productService.getAllProducts(pageable);
         return ResponseEntity.ok(new UnifiedAPIResponse<>(true, products, null));
     }

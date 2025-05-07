@@ -1,5 +1,6 @@
 package com.practice.ecommerce.service;
 
+import com.practice.ecommerce.dto.UpsertProductDTO;
 import com.practice.ecommerce.entity.Product;
 import com.practice.ecommerce.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,20 +27,26 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
 
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    public Product createProduct(UpsertProductDTO product) {
+        Product newProduct = new Product();
+        dtoMappingToEntity(newProduct, product);
+        return productRepository.save(newProduct);
     }
 
-    public Product updateProduct(Long id, Product updatedProduct) {
+    public Product updateProduct(Long id, UpsertProductDTO updatedProduct) {
         Product existing = getProductById(id);
-        existing.setName(updatedProduct.getName());
-        existing.setDescription(updatedProduct.getDescription());
-        existing.setPrice(updatedProduct.getPrice());
-        existing.setStock(updatedProduct.getStock());
+        dtoMappingToEntity(existing, updatedProduct);
         return productRepository.save(existing);
     }
 
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
+    }
+
+    private void dtoMappingToEntity (Product entity, UpsertProductDTO dto){
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setStock(dto.getStock());
     }
 }

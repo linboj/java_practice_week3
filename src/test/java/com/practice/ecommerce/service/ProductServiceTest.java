@@ -1,5 +1,6 @@
 package com.practice.ecommerce.service;
 
+import com.practice.ecommerce.dto.UpsertProductDTO;
 import com.practice.ecommerce.entity.Product;
 import com.practice.ecommerce.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,8 @@ public class ProductServiceTest {
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
         // act
-        Product savedProduct = productService.createProduct(product);
+        UpsertProductDTO upsertProductDTO = new UpsertProductDTO("TEST1", "", BigDecimal.valueOf(10), 2);
+        Product savedProduct = productService.createProduct(upsertProductDTO);
 
         // assert
         assertNotNull(savedProduct);

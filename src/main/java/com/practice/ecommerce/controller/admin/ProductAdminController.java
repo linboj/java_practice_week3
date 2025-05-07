@@ -1,6 +1,7 @@
 package com.practice.ecommerce.controller.admin;
 
 import com.practice.ecommerce.dto.UnifiedAPIResponse;
+import com.practice.ecommerce.dto.UpsertProductDTO;
 import com.practice.ecommerce.entity.Product;
 import com.practice.ecommerce.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +34,7 @@ public class ProductAdminController {
                     @ApiResponse(responseCode = "400", description = "Invalid input data"),
             }
     )
-    public ResponseEntity<UnifiedAPIResponse<Product>> create(@Valid @RequestBody Product product) {
+    public ResponseEntity<UnifiedAPIResponse<Product>> create(@Valid @RequestBody UpsertProductDTO product) {
         Product newProduct = productService.createProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(new UnifiedAPIResponse<>(true, newProduct, null));
     }
@@ -46,7 +47,7 @@ public class ProductAdminController {
                     @ApiResponse(responseCode = "404", description = "Product not found"),
                     @ApiResponse(responseCode = "400", description = "Invalid input")
             })
-    public ResponseEntity<UnifiedAPIResponse<Product>> update(@PathVariable Long id, @Valid @RequestBody Product product) {
+    public ResponseEntity<UnifiedAPIResponse<Product>> update(@PathVariable Long id, @Valid @RequestBody UpsertProductDTO product) {
         Product updatedProduct = productService.updateProduct(id, product);
         return ResponseEntity.ok(new UnifiedAPIResponse<>(true, updatedProduct, null));
     }

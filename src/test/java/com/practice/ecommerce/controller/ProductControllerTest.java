@@ -1,6 +1,7 @@
 package com.practice.ecommerce.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.practice.ecommerce.dto.UpsertProductDTO;
 import com.practice.ecommerce.entity.Product;
 import com.practice.ecommerce.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,7 @@ public class ProductControllerTest {
         Product savedProduct = Product.builder()
                 .id(1L).name("TEST1").description("TEST1").price(BigDecimal.valueOf(10)).stock(1).build();
 
-        when(productService.createProduct(any(Product.class))).thenReturn(savedProduct);
+        when(productService.createProduct(any(UpsertProductDTO.class))).thenReturn(savedProduct);
 
         mockMvc.perform(post("/api/admin/products").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
@@ -51,7 +52,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.data.name").value("TEST1"))
                 .andExpect(jsonPath("$.data.description").value("TEST1"));
 
-        verify(productService, times(1)).createProduct(any(Product.class));
+        verify(productService, times(1)).createProduct(any(UpsertProductDTO.class));
     }
 
     @Test
@@ -75,7 +76,7 @@ public class ProductControllerTest {
         Product updatedProduct = Product.builder()
                 .id(null).name("TEST1").description("TEST1").price(BigDecimal.valueOf(10)).stock(1).build();
 
-        when(productService.updateProduct(eq(1L), any(Product.class))).thenReturn(updatedProduct);
+        when(productService.updateProduct(eq(1L), any(UpsertProductDTO.class))).thenReturn(updatedProduct);
 
         mockMvc.perform(put("/api/admin/products/1").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedProduct)))
@@ -84,7 +85,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.data.name").value("TEST1"))
                 .andExpect(jsonPath("$.data.stock").value(1));
 
-        verify(productService, times(1)).updateProduct(eq(1L), any(Product.class));
+        verify(productService, times(1)).updateProduct(eq(1L), any(UpsertProductDTO.class));
     }
 
     @Test
