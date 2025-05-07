@@ -1,11 +1,14 @@
 package com.practice.ecommerce.exception;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Schema(description = "Standard error response")
@@ -31,5 +34,10 @@ public class ErrorDetails {
         this.error = status.getReasonPhrase();
         this.message = message;
         this.path = request.getRequestURI();
+    }
+
+    @JsonProperty("timestamp")
+    public String getFormattedTimestamp() {
+        return timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }
