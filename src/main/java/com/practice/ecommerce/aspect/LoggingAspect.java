@@ -14,6 +14,9 @@ import java.util.Arrays;
 public class LoggingAspect {
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
+    @Pointcut("execution(* com.practice.ecommerce.controller..*(..))")
+    public void controllerMethods() {}
+
     @Pointcut("execution(* com.practice.ecommerce.service..*(..))")
     public void serviceMethods() {}
 
