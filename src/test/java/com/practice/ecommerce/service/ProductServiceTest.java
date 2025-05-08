@@ -115,13 +115,14 @@ public class ProductServiceTest {
         // arrange
         Long id = 1L;
 
-        when(productRepository.existsById(id)).thenReturn(true);
+//        when(productRepository.existsById(id)).thenReturn(true);
         doNothing().when(productRepository).deleteById(id);
 
         // act
         productService.deleteProduct(1L);
 
         // assert
+//        verify(productRepository, times(1)).existsById(id);
         verify(productRepository, times(1)).deleteById(id);
     }
 
