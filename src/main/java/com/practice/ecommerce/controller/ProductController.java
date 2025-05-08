@@ -44,12 +44,13 @@ public class ProductController {
     public ResponseEntity<UnifiedAPIResponse<Page<Product>>> getAllProduct(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") ProductSortField sortBy,
-            @RequestParam(defaultValue = "asc") SortDirection direction
+            @RequestParam(defaultValue = "ID") ProductSortField sortBy,
+            @RequestParam(defaultValue = "ASC") SortDirection direction
     ) {
         Sort.Direction sortDirection = String.valueOf(direction).equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, String.valueOf(sortBy).toLowerCase()));
         Page<Product> products = productService.getAllProducts(pageable);
+        System.out.println(products);
         return ResponseEntity.ok(new UnifiedAPIResponse<>(true, products, null));
     }
 

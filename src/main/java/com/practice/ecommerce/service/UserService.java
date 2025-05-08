@@ -25,6 +25,8 @@ public class UserService implements UserDetailsService {
                 throw new UsernameNotFoundException("使用者不存在");
             }
             return user;
+        } catch (UsernameNotFoundException e) {
+            throw new UsernameNotFoundException("Incorrect username or password", e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

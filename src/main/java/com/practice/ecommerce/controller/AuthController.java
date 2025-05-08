@@ -2,9 +2,14 @@ package com.practice.ecommerce.controller;
 
 import com.practice.ecommerce.dto.AuthRequest;
 import com.practice.ecommerce.dto.AuthResponse;
+import com.practice.ecommerce.dto.UnifiedAPIResponse;
 import com.practice.ecommerce.entity.User;
 import com.practice.ecommerce.service.JwtService;
 import com.practice.ecommerce.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +19,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -28,6 +31,19 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Login.",
+            description = "User login.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "User login successfully",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = AuthResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "Username or password error"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) throws Exception {
         try {
             Authentication auth = authManager.authenticate(
@@ -46,7 +62,19 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
+    @Operation(
+            summary = "Logout.",
+            description = "User logout.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "User logout successfully",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = AuthResponse.class))),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     public ResponseEntity<?> logout(HttpServletRequest request) {
         return ResponseEntity.ok("Logged out successfully.");
     }
