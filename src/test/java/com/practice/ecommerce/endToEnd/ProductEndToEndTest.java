@@ -14,6 +14,7 @@ import io.restassured.http.Header;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -45,8 +46,10 @@ public class ProductEndToEndTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private final String username = "admin@test.com";
-    private final String password = "adminTEST";
+    @Value("${admin.username}")
+    private String username;
+    @Value("${admin.password}")
+    private String password;
 
     @BeforeEach
     void setUp() {

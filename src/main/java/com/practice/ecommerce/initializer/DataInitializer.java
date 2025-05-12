@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,15 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${admin.username}")
+    private String adminUsername;
+    @Value("${admin.password}")
+    private String adminPassword;
+    @Value("${user.username}")
+    private String userUsername;
+    @Value("${user.password}")
+    private String userPassword;
+
     @Override
     public void run(String... args) throws Exception {
         if (roleRepository.count() == 0) {
@@ -41,16 +51,16 @@ public class DataInitializer implements CommandLineRunner {
             if (!userRepository.findByUsername("admin").isPresent()) {
                 User admin = new User();
                 admin.setName("admin");
-                admin.setEmail("admin@test.com");
-                admin.setPassword(passwordEncoder.encode("adminTEST")); // hashed password
+                admin.setEmail(adminUsername);
+                admin.setPassword(passwordEncoder.encode(adminPassword)); // hashed password
                 admin.setRoles(Set.of(adminRole, userRole));
                 userRepository.save(admin);
                 logger.info("ADMIN USER CREATE: {}", admin);
 
                 User user = new User();
                 user.setName("testUser");
-                user.setEmail("user@test.com");
-                user.setPassword(passwordEncoder.encode("userTEST")); // hashed password
+                user.setEmail(userUsername);
+                user.setPassword(passwordEncoder.encode(userPassword)); // hashed password
                 user.setRoles(Set.of(userRole));
                 userRepository.save(user);
                 logger.info("USER CREATE: {}", user);
