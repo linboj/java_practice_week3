@@ -1,29 +1,20 @@
 package com.practice.ecommerce.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.practice.ecommerce.config.CorsConfig;
 import com.practice.ecommerce.config.SecurityConfig;
-import com.practice.ecommerce.controller.admin.ProductAdminController;
-import com.practice.ecommerce.dto.UnifiedAPIResponse;
 import com.practice.ecommerce.entity.Product;
 import com.practice.ecommerce.exception.CustomAccessDeniedHandler;
 import com.practice.ecommerce.exception.CustomAuthenticationEntryPoint;
-import com.practice.ecommerce.exception.ErrorDetails;
 import com.practice.ecommerce.filter.JwtRequestFilter;
 import com.practice.ecommerce.repository.UserRepository;
 import com.practice.ecommerce.service.JwtService;
 import com.practice.ecommerce.service.ProductService;
 import com.practice.ecommerce.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.*;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -42,7 +33,7 @@ public class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private ProductService productService;
 
     @Autowired
